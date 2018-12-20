@@ -11,7 +11,7 @@
                             <v-text-field prepend-icon="person" name="login" label="Login" type="text" v-model="login" required :rules="loginRules"></v-text-field>
                             <v-text-field prepend-icon="mail_outline" name="email" label="Email" type="email" v-model="email" required :rules="emailRules"></v-text-field>
                             <v-text-field id="password" prepend-icon="lock" name="password" label="Password" type="password" v-model="password" :counter="3" required :rules="passwordRules"></v-text-field>
-                            <v-text-field id="confirmed" prepend-icon="lock" name="onfirmed" label="Confirm password" type="password" v-model="confirmed" :counter="3" required :rules="confirmedRules"></v-text-field>
+                            <v-text-field id="confirmed" prepend-icon="lock" name="confirmed" label="Confirm password" type="password" v-model="confirmed" :counter="3" required :rules="confirmedRules"></v-text-field>
                         </v-form>
                     </v-card-text>
                     <v-card-actions>
