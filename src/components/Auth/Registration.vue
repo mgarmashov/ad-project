@@ -7,7 +7,7 @@
                         <v-toolbar-title>Registration form</v-toolbar-title>
                     </v-toolbar>
                     <v-card-text>
-                        <v-form v-model="valid" ref="form" lazy-validation="false">
+                        <v-form v-model="valid" ref="form" lazy-validation>
                             <v-text-field prepend-icon="person" name="login" label="Login" type="text" v-model="login" required :rules="loginRules"></v-text-field>
                             <v-text-field prepend-icon="mail_outline" name="email" label="Email" type="email" v-model="email" required :rules="emailRules"></v-text-field>
                             <v-text-field id="password" prepend-icon="lock" name="password" label="Password" type="password" v-model="password" :counter="3" required :rules="passwordRules"></v-text-field>
@@ -16,7 +16,12 @@
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn color="primary" @click="onSubmit" :disabled="!valid">Login</v-btn>
+                        <v-btn
+                                color="primary"
+                                @click="onSubmit"
+                                :loading="loading"
+                                :disabled="!valid || loading"
+                        >Login</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-flex>
@@ -49,14 +54,24 @@
         ]
       }
     },
+    computed: {
+      loading () {
+        return this.$store.getters.loading
+      }
+    },
     methods: {
       onSubmit () {
         if (this.$refs.form.validate()) {
           let user = {
             login: this.login,
+            email: this.email,
             password: this.password
           }
-          console.log(user)
+          this.$store.dispatch('registerUser', user)
+            .then(() => {
+              this.$router.push('/')
+            })
+            .catch(err => console.log(err))
         }
       }
     }
