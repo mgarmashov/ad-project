@@ -4,15 +4,17 @@
             <v-flex xs12 sm6 offset-sm3>
                 <h1 class="text--secondary mb-3">Advertisment</h1>
 
-                <v-card class="elevation-7 mb-3" v-for="ad in ads">
+                <v-card
+                        class="elevation-10 mb-3"
+                        v-for="ad in myAds"
+                        :key="ad.id"
+                >
                     <v-layout row>
                         <v-flex xs4>
                             <v-card-media
-                                :src="ad.imageSrc"
-                                height="160"
-                                :key="ad.id"
-                            >
-                            </v-card-media>
+                                    :src="ad.imageSrc"
+                                    height="160px"
+                            ></v-card-media>
                         </v-flex>
                         <v-flex xs8>
                             <v-card-text>
@@ -25,7 +27,6 @@
                                         class="info"
                                         :to="'/ad/' + ad.id"
                                 >Open</v-btn>
-
                             </v-card-actions>
                         </v-flex>
                     </v-layout>
@@ -37,11 +38,9 @@
 
 <script>
   export default {
-    data () {
-      return {
-        ads: [
-          {title: '1st ad', description: '', promo: true, imageSrc: 'http://bm.img.com.ua/img/prikol/images/large/0/0/307600.jpg', id: '1'},
-        ]
+    computed: {
+      myAds () {
+        return this.$store.getters.myAds
       }
     }
   }
