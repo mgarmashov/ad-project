@@ -3,12 +3,13 @@
         <v-layout row>
             <v-flex xs12>
                 <v-card>
-                    <v-card-media
-                            src="http://bm.img.com.ua/img/prikol/images/large/0/0/307600.jpg"
+                    <v-img
+                            :src="ad.imageSrc"
                             height="300px"
-                    ></v-card-media>
+                    ></v-img>
                     <v-card-text>
-                        <h1 class="text--primary">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit, sapiente.</h1>
+                        <h1 class="text--primary">{{ad.title}}</h1>
+                        <p>{{ad.description}}</p>
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer></v-spacer>
@@ -23,8 +24,12 @@
 
 <script>
   export default {
-    data () {
-      return {}
+    props: ['id'],
+    computed: {
+      ad () {
+        const id = this.id
+        return this.$store.getters.adById(id)
+      }
     }
   }
 </script>

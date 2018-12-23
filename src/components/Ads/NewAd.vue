@@ -76,9 +76,11 @@
           const ad = {
             title: this.title,
             description: this.description,
-            promo: this.promo
+            promo: this.promo,
+            imageSrc: 'http://s4.fotokto.ru/photo/full/177/1778943.jpg'
           }
 
+          this.$store.dispatch('createdAd', ad)
           console.log(ad)
         }
       }

@@ -9,8 +9,18 @@ export default {
       {title: '6st ad', description: '', promo: false, imageSrc: 'https://images.aif.ru/007/410/7099f160be2419d6128e3a57e62ec326.jpg', id: '6'}
     ]
   },
-  mutations: {},
-  actions: {},
+  mutations: {
+    createAd (state, payload) {
+      state.ads.push(payload)
+    }
+  },
+  actions: {
+    createdAd ({commit}, payload) {
+      payload.id = String(Math.random())
+
+      commit('createAd', payload)
+    }
+  },
   getters: {
     ads (state) {
       return state.ads
@@ -22,6 +32,11 @@ export default {
     },
     myAds (state) {
       return state.ads
+    },
+    adById (state) {
+      return adId => {
+        return state.ads.find(ad => ad.id === adId)
+      }
     }
   }
 }
