@@ -23,6 +23,7 @@
                             </v-card-text>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
+
                                 <v-btn
                                         class="info"
                                         :to="'/ad/' + ad.id"
