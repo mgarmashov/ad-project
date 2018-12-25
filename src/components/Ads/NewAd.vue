@@ -26,15 +26,23 @@
                     <v-flex xs12>
                         <v-btn
                                 class="warning"
+                                @click="triggerUpload"
                         >
                             Upload
                             <v-icon right dark>cloud_upload</v-icon>
                         </v-btn>
+                        <input
+                                ref="fileInput"
+                                type="file"
+                                style="display: none"
+                                accept="image/*"
+                                @change="onFileChange"
+                        >
                     </v-flex>
                 </v-layout>
                 <v-layout row>
                     <v-flex xs12>
-                        <img src="" alt="" height="100">
+                        <img :src="imageSrc" alt="" height="250" v-if="imageSrc">
                     </v-flex>
                 </v-layout>
 
@@ -56,7 +64,7 @@
                                 class="success"
                                 @click="createAd"
                                 :loading="loading"
-                                :disabled="!valid || loading"
+                                :disabled="!valid || !image || loading"
                         >Создать</v-btn>
                     </v-flex>
                 </v-layout>
@@ -72,7 +80,9 @@
         title: '',
         description: '',
         promo: false,
-        valid: false
+        valid: false,
+        image: null,
+        imageSrc: ''
       }
     },
     computed: {
@@ -82,12 +92,12 @@
     },
     methods: {
       createAd () {
-        if (this.$refs.form.validate()) {
+        if (this.$refs.form.validate() && this.image) {
           const ad = {
             title: this.title,
             description: this.description,
             promo: this.promo,
-            imageSrc: 'http://s4.fotokto.ru/photo/full/177/1778943.jpg'
+            image: this.image
           }
 
           this.$store.dispatch('createAd', ad)
@@ -96,6 +106,19 @@
             })
             .catch(() => {})
         }
+      },
+      triggerUpload () {
+        this.$refs.fileInput.click()
+      },
+      onFileChange (event) {
+        const file = event.target.files[0]
+
+        const reader = new FileReader()
+        reader.onload = e => {
+          this.imageSrc = reader.result
+        }
+        reader.readAsDataURL(file)
+        this.image = file
       }
     }
   }

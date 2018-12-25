@@ -15,8 +15,6 @@ export default {
   mutations: {
     setUser (state, payload) {
       state.user = payload
-      console.log(state.user)
-      console.log('test')
     }
   },
   actions: {
@@ -40,7 +38,6 @@ export default {
         const user = await firebase.auth().signInWithEmailAndPassword(email, password)
         commit('setUser', new User(user.uid))
         commit('setLoading', false)
-        console.log(user)
       } catch (error) {
         commit('setLoading', false)
         commit('setError', error.message)
