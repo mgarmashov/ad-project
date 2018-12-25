@@ -52,7 +52,12 @@
                 <v-layout row>
                     <v-flex xs12>
                         <v-spacer></v-spacer>
-                        <v-btn class="success" @click="createAd" :disabled="!valid">Создать</v-btn>
+                        <v-btn
+                                class="success"
+                                @click="createAd"
+                                :loading="loading"
+                                :disabled="!valid || loading"
+                        >Создать</v-btn>
                     </v-flex>
                 </v-layout>
             </v-flex>
@@ -70,6 +75,11 @@
         valid: false
       }
     },
+    computed: {
+      loading () {
+        return this.$store.getters.loading
+      }
+    },
     methods: {
       createAd () {
         if (this.$refs.form.validate()) {
@@ -80,8 +90,11 @@
             imageSrc: 'http://s4.fotokto.ru/photo/full/177/1778943.jpg'
           }
 
-          this.$store.dispatch('createdAd', ad)
-          console.log(ad)
+          this.$store.dispatch('createAd', ad)
+            .then(() => {
+              this.$router.push('/list')
+            })
+            .catch(() => {})
         }
       }
     }

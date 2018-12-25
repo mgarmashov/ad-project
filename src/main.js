@@ -4,7 +4,9 @@ import router from './router'
 import store from './store'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
-import * as fb from 'firebase'
+// import * as firebase from 'firebase'
+import firebase from 'firebase/app'
+import 'firebase/auth'
 
 Vue.use(Vuetify)
 
@@ -18,7 +20,7 @@ new Vue({
   components: { App },
   template: '<App/>',
   created () {
-    fb.initializeApp({
+    firebase.initializeApp({
       apiKey: 'AIzaSyAwY-xFaNRSOCTgr8vAXMHg9RILDEDXXSc',
       authDomain: 'ad-project-a7c75.firebaseapp.com',
       databaseURL: 'https://ad-project-a7c75.firebaseio.com',
@@ -27,10 +29,11 @@ new Vue({
       messagingSenderId: '183912748975'
     })
 
-    fb.auth().onAuthStateChanged(user => {
+    firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.$store.dispatch('autoLoginUser', user)
       }
     })
+    this.$store.dispatch('fetchAds')
   }
 })

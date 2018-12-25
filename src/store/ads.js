@@ -1,3 +1,18 @@
+// import * as firebase from 'firebase'
+import firebase from 'firebase/app'
+import 'firebase/database'
+
+class Ad {
+  constructor (title, description, ownerId, imageSrc = '', promo = false, id = null) {
+    this.title = title
+    this.description = description
+    this.ownerId = ownerId
+    this.imageSrc = imageSrc
+    this.promo = promo
+    this.id = id
+  }
+}
+
 export default {
   state: {
     ads: [
@@ -12,13 +27,66 @@ export default {
   mutations: {
     createAd (state, payload) {
       state.ads.push(payload)
+    },
+    loadAds (state, payload) {
+      state.ads = payload
     }
   },
   actions: {
-    createdAd ({commit}, payload) {
-      payload.id = String(Math.random())
+    async createAd ({commit, getters}, payload) {
+      commit('clearError')
+      commit('setLoading', true)
+      try {
+        console.log(getters)
+        console.log(getters.user)
+        const newAd = new Ad(
+          payload.title,
+          payload.description,
+          getters.user.id,
+          payload.imageSrc,
+          payload.promo
+        )
+        console.log(newAd)
+        const ad = await firebase.database().ref('ads').push(newAd)
 
-      commit('createAd', payload)
+        commit('createAd', {
+          ...newAd,
+          id: ad.key
+        })
+      } catch (error) {
+        commit('setError', error.message)
+        commit('setLoading', false)
+        throw error
+      }
+    },
+    async fetchAds ({commit}) {
+      commit('clearError')
+      commit('setLoading', true)
+      const resultAds = []
+      try {
+        const fbVal = await firebase.database().ref('ads').once('value')
+        const ads = fbVal.val()
+        console.log(ads)
+        Object.keys(ads).forEach(key => {
+          const ad = ads[key]
+          resultAds.push(
+            new Ad(
+              ad.title,
+              ad.description,
+              ad.ownerId,
+              ad.imageSrc,
+              ad.promo,
+              key
+            )
+          )
+        })
+        commit('loadAds', resultAds)
+        commit('setLoading', false)
+      } catch (error) {
+        commit('setError', error.message)
+        commit('setLoading', false)
+        throw error
+      }
     }
   },
   getters: {

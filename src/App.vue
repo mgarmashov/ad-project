@@ -71,11 +71,11 @@
         </v-content>
         <template v-if="error">
             <v-snackbar
-                    :multi-line="mode === 'multi-line'"
+                    :multi-line=true
                     color="error"
                     @input="closeError"
                     :timeout="5000"
-                    :vertical="mode === 'vertical'"
+                    :vertical=true
                     :value="true"
             >
                 {{ error }}

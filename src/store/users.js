@@ -1,5 +1,7 @@
-import * as fb from 'firebase'
-
+// import * as firebase from 'firebase'
+import firebase from 'firebase/app'
+import 'firebase/auth'
+//
 class User {
   constructor (id) {
     this.id = id
@@ -13,6 +15,8 @@ export default {
   mutations: {
     setUser (state, payload) {
       state.user = payload
+      console.log(state.user)
+      console.log('test')
     }
   },
   actions: {
@@ -20,7 +24,7 @@ export default {
       commit('clearError')
       commit('setLoading', true)
       try {
-        const user = await fb.auth().createUserWithEmailAndPassword(email, password)
+        const user = await firebase.auth().createUserWithEmailAndPassword(email, password)
         commit('setUser', new User(user.uid))
         commit('setLoading', false)
       } catch (error) {
@@ -33,9 +37,10 @@ export default {
       commit('clearError')
       commit('setLoading', true)
       try {
-        const user = await fb.auth().signInWithEmailAndPassword(email, password)
+        const user = await firebase.auth().signInWithEmailAndPassword(email, password)
         commit('setUser', new User(user.uid))
         commit('setLoading', false)
+        console.log(user)
       } catch (error) {
         commit('setLoading', false)
         commit('setError', error.message)
@@ -46,7 +51,7 @@ export default {
       commit('setUser', new User(payload.uid))
     },
     logoutUser ({commit}) {
-      fb.auth().signOut()
+      firebase.auth().signOut()
       commit('setUser', null)
       this.$router.push('/')
     }
